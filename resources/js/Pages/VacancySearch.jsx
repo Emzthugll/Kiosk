@@ -8,13 +8,13 @@ export default function VacancySearch({ vacancies, search, activities }) {
     const [showQR, setShowQR] = useState(null);
     const [showFullDetails, setShowFullDetails] = useState(false);
 
-    // Debounce search (wait until user stops typing)
+    // Debounce search input
     useEffect(() => {
         const delay = setTimeout(() => {
             if (query.length >= 3 || query.length === 0) {
                 router.get(
-                    "/", // your Inertia route (index page)
-                    { search: query }, // pass query to backend
+                    "/",
+                    { search: query },
                     {
                         preserveState: true,
                         replace: true,

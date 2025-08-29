@@ -1,6 +1,6 @@
 <?php
 
-// app/Http/Controllers/VacancyController.php
+
 namespace App\Http\Controllers;
 
 use App\Models\Vacancy;
