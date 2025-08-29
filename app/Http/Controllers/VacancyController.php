@@ -6,12 +6,14 @@ namespace App\Http\Controllers;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\RecruitmentActivity;
 
 class VacancyController extends Controller
 {
     public function index(Request $request)
 {
     $search = $request->input('search');
+    $activities = RecruitmentActivity::latest()->take(3)->get();
 
     $vacancies = Vacancy::with('company')
         ->when($search, function ($query, $search) {
@@ -29,6 +31,7 @@ class VacancyController extends Controller
     return Inertia::render('VacancySearch', [
         'vacancies' => $vacancies,
         'search'    => $search,
+        'activities' => $activities,
     ]);
 }
 
