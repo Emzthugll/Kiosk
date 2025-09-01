@@ -106,12 +106,18 @@ export default function VacancySearch({ vacancies, search, activities }) {
                                                 src={`https://workinilocosnorte.ph/storage/company/${vacancy.company.logo}`}
                                                 alt={vacancy.company.name}
                                                 className="w-full h-full object-contain"
+                                                onError={(e) => {
+                                                    e.currentTarget.onerror =
+                                                        null; // Prevents infinite loop
+                                                    e.currentTarget.src =
+                                                        "https://kiosk.workinilocosnorte.ph/images/work.png"; // Path inside public/
+                                                }}
                                             />
                                         </div>
                                     )}
 
                                     {/* Title */}
-                                    <h3 className="font-semibold text-md mb-1 text-center">
+                                    <h3 className="font-semibold text-md mb-1 text-center uppercase">
                                         {vacancy.title}
                                     </h3>
 
