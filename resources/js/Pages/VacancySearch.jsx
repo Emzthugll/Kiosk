@@ -104,7 +104,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
                                     <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-lg bg-gray-100">
                                         {vacancy.company?.logo ? (
                                             <img
-                                                src={`/storage/company/${vacancy.company.logo}`}
+                                                src={`https://workinilocosnorte.ph/storage/company/${vacancy.company.logo}`}
                                                 alt={vacancy.company.name}
                                                 className="w-full h-full object-contain"
                                             />
