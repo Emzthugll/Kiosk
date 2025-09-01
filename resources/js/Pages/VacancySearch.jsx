@@ -122,7 +122,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
                                     </h3>
 
                                     {/* Company */}
-                                    <p className="text-sm text-gray-600 mb-4 text-center">
+                                    <p className="text-sm text-gray-600 mb-4 text-center capitalize">
                                         {vacancy.company?.name ||
                                             "Unknown Company"}
                                     </p>
