@@ -35,9 +35,9 @@ export default function VacancySearch({ vacancies, search, activities }) {
     return (
         <div className="flex flex-col md:flex-row min-h-screen p-4 md:p-6 gap-6 bg-white">
             {/* Left Column */}
-            <div className="w-20 md:w-1/3 border-r-2 border-r-slate-300 pr-6 space-y-6">
+            <div className="w-20 md:w-1/3 border-r-2 border-r-slate-300 pr-6 fixed top-0 left-0 h-screen flex flex-col bg-white">
                 {/* Search Bar */}
-                <div className="sticky top-6 p-6 border-slate-300 rounded-2xl">
+                <div className="p-6 border-slate-300 rounded-2xl bg-white mb-6">
                     <img
                         className="h-10 w-auto mb-4"
                         src="./images/work.png"
@@ -69,8 +69,8 @@ export default function VacancySearch({ vacancies, search, activities }) {
                     </p>
                 </div>
 
-                {/* Announcements */}
-                <div className="sticky top-[250px] bg-white p-6 rounded-2xl border-slate-300  space-y-3 max-h-[400px] overflow-y-auto">
+                {/* Announcements - fills remaining height */}
+                <div className="bg-white p-6 rounded-2xl border-slate-300 space-y-3 flex-1 overflow-y-auto">
                     <h1 className="text-2xl font-bold mb-2">
                         📢 Announcements
                     </h1>
@@ -88,8 +88,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
             </div>
 
             {/* Right Column */}
-            <div className="w-full md:w-2/3">
-                <h2 className="text-xl font-bold mb-4">Latest Vacancies</h2>
+            <div className="w-full md:w-2/3 ml-[35%]">
                 {vacancies.length === 0 ? (
                     <p className="text-gray-500">No vacancies found.</p>
                 ) : (
@@ -147,28 +146,10 @@ export default function VacancySearch({ vacancies, search, activities }) {
                             {showQR.title} - {showQR.company?.name}
                         </h3>
 
-                        <div className="text-sm text-left text-gray-700 mb-4">
-                            {showFullDetails ? (
-                                <span
-                                    dangerouslySetInnerHTML={{
-                                        __html: showQR.details,
-                                    }}
-                                />
-                            ) : (
-                                decodeHtmlEntities(
-                                    showQR.details
-                                        .replace(/<[^>]+>/g, "")
-                                        .slice(0, 100)
-                                ) + "..."
-                            )}
-                        </div>
-
-                        <button
-                            className="text-blue-600 text-xs mb-4 hover:underline"
-                            onClick={() => setShowFullDetails(!showFullDetails)}
-                        >
-                            {showFullDetails ? "Show Less" : "Read More"}
-                        </button>
+                        <div
+                            className="text-sm text-left text-gray-700 mb-4"
+                            dangerouslySetInnerHTML={{ __html: showQR.details }}
+                        />
 
                         {/* Centered QR Code Section */}
                         <div className="w-full flex flex-col items-center mb-4">
@@ -176,7 +157,15 @@ export default function VacancySearch({ vacancies, search, activities }) {
                                 value={`https://workinilocosnorte.ph/jobs/search?vacancyId=${showQR.id}`}
                                 size={150}
                             />
-                            <h3 className="mt-2 text-center">Scan Me</h3>
+                            <p className="mt-2 text-center text-sm text-gray-600">
+                                For further inquiries, please visit us at the{" "}
+                                <br />
+                                <span className="font-semibold">
+                                    Public Employment Services Office
+                                </span>
+                                <br />
+                                West Wing, Capitol Building, Laoag City
+                            </p>
                         </div>
 
                         <button

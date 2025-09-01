@@ -24,7 +24,7 @@ class VacancyController extends Controller
                   });
         }, function ($query) {
             
-            $query->latest()->take(9);
+            $query->latest()->take(12);
         })
         ->get();
 

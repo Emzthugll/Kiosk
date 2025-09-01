@@ -9,7 +9,7 @@ class Vacancy extends Model
 {
     use HasFactory;
 
-    protected $table = 'vacancies'; // link to your old vacancies table
+    protected $table = 'vacancies'; 
 
     protected $fillable = [
         'company_id',
