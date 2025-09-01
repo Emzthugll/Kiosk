@@ -100,19 +100,15 @@ export default function VacancySearch({ vacancies, search, activities }) {
                             >
                                 <div className="flex flex-col items-center">
                                     {/* Logo */}
-                                    <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-lg bg-gray-100">
-                                        {vacancy.company?.logo ? (
+                                    {vacancy.company?.logo && (
+                                        <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-lg ">
                                             <img
                                                 src={`https://workinilocosnorte.ph/storage/company/${vacancy.company.logo}`}
                                                 alt={vacancy.company.name}
                                                 className="w-full h-full object-contain"
                                             />
-                                        ) : (
-                                            <span className="text-xs text-gray-400">
-                                                No Logo
-                                            </span>
-                                        )}
-                                    </div>
+                                        </div>
+                                    )}
 
                                     {/* Title */}
                                     <h3 className="font-semibold text-md mb-1 text-center">
