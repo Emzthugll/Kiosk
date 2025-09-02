@@ -13,7 +13,7 @@ class VacancyController extends Controller
     public function index(Request $request)
 {
     $search = $request->input('search');
-    $activities = RecruitmentActivity::latest()->take(3)->get();
+    $activities = RecruitmentActivity::latest()->take(6)->get();
 
     $vacancies = Vacancy::with('company')
         ->when($search, function ($query, $search) {
@@ -24,7 +24,7 @@ class VacancyController extends Controller
                   });
         }, function ($query) {
             
-            $query->latest()->take(12);
+            $query->latest()->take(15);
         })
         ->get();
 
