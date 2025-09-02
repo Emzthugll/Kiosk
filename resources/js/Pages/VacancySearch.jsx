@@ -38,7 +38,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
             {/* Left Column */}
             <div className="w-20 md:w-1/3 border-r-2 border-r-slate-300 pr-3 fixed top-0 left-0 h-screen flex flex-col bg-white">
                 {/* Search Bar */}
-                <div className="px-2 py-3 border-slate-300 rounded-2xl bg-white mb-6">
+                <div className="px-5 py-3 border-slate-300 rounded-2xl bg-white mb-6">
                     <img
                         className="h-[60px] w-auto mb-4 mx-auto"
                         src="./images/work.png"
@@ -85,8 +85,8 @@ export default function VacancySearch({ vacancies, search, activities }) {
                 </div>
 
                 {/* Announcements + Footer */}
-                <div className="bg-white px-2  rounded-2xl border-slate-300 flex-1 flex flex-col min-h-0">
-                    <h1 className="text-2xl font-bold mb-5 flex-shrink-0 flex items-center gap-2">
+                <div className="bg-white  rounded-2xl border-slate-300 flex-1 flex flex-col min-h-0">
+                    <h1 className="text-2xl px-4 font-bold mb-5 flex-shrink-0 flex items-center gap-2">
                         <img
                             src="./images/horn.png"
                             alt="announcement icon"
