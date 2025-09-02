@@ -1,7 +1,7 @@
 import { Link, router } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import AnnouncementItem from "@/Components/AnnouncementItem";
-import QRCode from "react-qr-code";
+import VacancyModal from "@/Components/VacancyModal";
 
 export default function VacancySearch({ vacancies, search, activities }) {
     const [query, setQuery] = useState(search || "");
@@ -25,16 +25,6 @@ export default function VacancySearch({ vacancies, search, activities }) {
         return () => clearTimeout(delay);
     }, [query]);
 
-    //disbale scroll
-    useEffect(() => {
-        if (showQR) {
-            document.body.style.overflow = "hidden";
-            document.body.style.paddingRight = "0px";
-        } else {
-            document.body.style.overflow = "auto";
-        }
-    }, [showQR]);
-
     function toTitleCase(str) {
         if (!str) return "";
         return str.replace(
@@ -44,11 +34,11 @@ export default function VacancySearch({ vacancies, search, activities }) {
     }
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen p-4 md:p-6 gap-6 bg-white ">
+        <div className="flex flex-col md:flex-row min-h-screen  p-6 gap-6 bg-white ">
             {/* Left Column */}
             <div className="w-20 md:w-1/3 border-r-2 border-r-slate-300 pr-3 fixed top-0 left-0 h-screen flex flex-col bg-white">
                 {/* Search Bar */}
-                <div className="p-6 border-slate-300 rounded-2xl bg-white mb-6">
+                <div className="px-2 py-3 border-slate-300 rounded-2xl bg-white mb-6">
                     <img
                         className="h-[60px] w-auto mb-4 mx-auto"
                         src="./images/work.png"
@@ -95,8 +85,8 @@ export default function VacancySearch({ vacancies, search, activities }) {
                 </div>
 
                 {/* Announcements + Footer */}
-                <div className="bg-white pl-4 rounded-2xl border-slate-300 flex-1 flex flex-col min-h-0">
-                    <h1 className="text-2xl font-bold mb-2 flex-shrink-0 flex items-center gap-2">
+                <div className="bg-white px-2  rounded-2xl border-slate-300 flex-1 flex flex-col min-h-0">
+                    <h1 className="text-2xl font-bold mb-5 flex-shrink-0 flex items-center gap-2">
                         <img
                             src="./images/horn.png"
                             alt="announcement icon"
@@ -121,7 +111,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
                     {/* Footer */}
                     <div className="mt-2 pt-2  border-slate-300 text-center">
                         {/* Logos */}
-                        <div className="flex justify-center items-center gap-6 mb-2">
+                        <div className="flex justify-center items-center gap-6 mb-1">
                             <img
                                 src="./images/bagong-pilipinas.png"
                                 alt="Logo 1"
@@ -142,9 +132,6 @@ export default function VacancySearch({ vacancies, search, activities }) {
                         {/* Text */}
                         <p className="text-xs text-[#074797] pb-3">
                             Powered by the Information Technology Office.
-                            <br />
-                            Official website of the Provincial Government of
-                            Ilocos Norte. All rights reserved.
                         </p>
                     </div>
                 </div>
@@ -219,67 +206,11 @@ export default function VacancySearch({ vacancies, search, activities }) {
                 )}
             </div>
 
-            {/* Modal */}
-            {showQR && (
-                <div
-                    className="fixed inset-0 bg-[#074797] bg-opacity-20 flex items-center justify-center z-50 animate-modal-in"
-                    onClick={() => setShowQR(null)}
-                >
-                    <div
-                        className="bg-white rounded-xl max-w-3xl w-full max-h-[95vh] flex flex-col"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {/* Header */}
-                        <div className="flex justify-between items-center p-4">
-                            <h3 className="text-md font-semibold">
-                                <span className="uppercase">
-                                    {showQR.title}
-                                </span>
-                                {" - "}
-                                <span>{toTitleCase(showQR.company?.name)}</span>
-                            </h3>
-                            <svg
-                                fill="#074797"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={24}
-                                height={24}
-                                onClick={() => setShowQR(null)}
-                                className="cursor-pointer hover:scale-110 transition"
-                            >
-                                <path d="M4.293,18.293,10.586,12,4.293,5.707A1,1,0,0,1,5.707,4.293L12,10.586l6.293-6.293a1,1,0,1,1,1.414,1.414L13.414,12l6.293,6.293a1,1,0,1,1-1.414,1.414L12,13.414,5.707,19.707a1,1,0,0,1-1.414-1.414Z"></path>
-                            </svg>
-                        </div>
-
-                        {/* Details */}
-                        <div className="p-4 overflow-y-auto h-[500px]">
-                            <div
-                                className="text-sm text-left text-gray-700 mb-4"
-                                dangerouslySetInnerHTML={{
-                                    __html: showQR.details,
-                                }}
-                            />
-
-                            {/* QR Code */}
-                            <div className="flex flex-col mt-10 items-center">
-                                <QRCode
-                                    value={`https://workinilocosnorte.ph/jobs/search?vacancyId=${showQR.id}`}
-                                    size={130}
-                                />
-                                <p className="mt-2 text-center text-sm text-gray-600">
-                                    Scan the QR Code to apply or for more
-                                    information, please visit us at the <br />
-                                    <span className="font-semibold">
-                                        Public Employment Services Office
-                                    </span>
-                                    <br />
-                                    West Wing, Capitol Building, Laoag City
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <VacancyModal
+                showQR={showQR}
+                setShowQR={setShowQR}
+                toTitleCase={toTitleCase}
+            />
         </div>
     );
 }

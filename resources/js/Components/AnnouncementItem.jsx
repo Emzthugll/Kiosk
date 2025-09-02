@@ -6,12 +6,12 @@ export default function AnnouncementItem({ activity }) {
             .textContent || "";
 
     return (
-        <div className="text-sm text-gray-800 border-b border-gray-200 pb-2 mb-2">
-            <div className="font-extrabold">{activity.type}</div>
+        <div className="text-sm text-gray-800 border-b border-gray-200 pb-4 mb-2">
+            <div className="font-extrabold mb-6 ">{activity.type}</div>
 
-            <div className="text-gray-600 font-medium mb-1">{textDetails}</div>
+            <div className="text-gray-600 font-medium mb-4">{textDetails}</div>
 
-            <div className="text-xs text-gray-500 mt-1 space-y-1">
+            <div className="text-xs text-gray-500 mt-3 space-y-1">
                 <div>
                     <span className="font-medium">From:</span>{" "}
                     {new Date(activity.start).toLocaleString("en-US", {

@@ -14,3 +14,18 @@ createInertiaApp({
         createRoot(el).render(<App {...props} />);
     },
 });
+
+// Disable pinch-to-zoom and double-tap zoom
+document.addEventListener(
+    "touchmove",
+    function (event) {
+        if (event.scale !== undefined && event.scale !== 1) {
+            event.preventDefault();
+        }
+    },
+    { passive: false }
+);
+
+document.addEventListener("gesturestart", function (event) {
+    event.preventDefault();
+});

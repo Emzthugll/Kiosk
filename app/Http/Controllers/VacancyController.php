@@ -13,7 +13,7 @@ class VacancyController extends Controller
     public function index(Request $request)
 {
     $search = $request->input('search');
-    $activities = RecruitmentActivity::latest()->take(6)->get();
+    $activities = RecruitmentActivity::latest()->take(4)->get();
 
     $vacancies = Vacancy::with('company')
         ->when($search, function ($query, $search) {
