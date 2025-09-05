@@ -22,7 +22,7 @@ class Vacancy extends Model
         'total_vacancy',
     ];
 
-    // Relationship: A vacancy belongs to a company
+   
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');

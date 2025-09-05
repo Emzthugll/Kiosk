@@ -50,9 +50,12 @@ export default function VacancyModal({ showQR, setShowQR, toTitleCase }) {
         >
             <Fade in={!!showQR}>
                 <Box sx={style}>
-                    {/* Sticky Header */}
-                    <div className="flex justify-between items-center px-4 py-3  bg-white sticky top-0 z-10">
-                        <Typography variant="h6" component="h2">
+                    <div className="flex justify-between px-4 py-3 bg-white sticky top-0 z-10">
+                        <Typography
+                            variant="h6"
+                            component="h2"
+                            className="flex-1 pr-4 leading-snug"
+                        >
                             <span className="uppercase">{showQR?.title}</span> –{" "}
                             <span>
                                 {toTitleCase(showQR?.company?.name || "")}
@@ -65,7 +68,7 @@ export default function VacancyModal({ showQR, setShowQR, toTitleCase }) {
                             width={24}
                             height={24}
                             onClick={handleClose}
-                            className="cursor-pointer hover:scale-110 transition"
+                            className="cursor-pointer hover:scale-110 transition self-start mt-1"
                         >
                             <path d="M4.293,18.293,10.586,12,4.293,5.707A1,1,0,0,1,5.707,4.293L12,10.586l6.293-6.293a1,1,0,1,1,1.414,1.414L13.414,12l6.293,6.293a1,1,0,1,1-1.414,1.414L12,13.414,5.707,19.707a1,1,0,0,1-1.414-1.414Z"></path>
                         </svg>

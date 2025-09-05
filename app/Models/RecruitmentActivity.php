@@ -19,5 +19,14 @@ class RecruitmentActivity extends Model
         'details',
     ];
 
-   
+    
+    public function companies()
+    {
+        return $this->belongsToMany(
+            Company::class,                
+            'company_recruitment_activity', 
+            'recruitment_activity_id',     
+            'company_id'                   
+        );
+    }
 }

@@ -1,29 +1,54 @@
-import { Link, router } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import AnnouncementItem from "@/Components/AnnouncementItem";
 import VacancyModal from "@/Components/VacancyModal";
+import JobTypeDropdown from "@/Components/JobTypeDropdown";
+import SalaryFromDropdown from "@/Components/SalaryFromDropdown";
+import SalaryToDropdown from "@/Components/SalaryToDropdown";
+import PostedDateDropdown from "@/Components/PostedDateDropdown";
+
+import SpecializationDropdown from "@/Components/SpecializationDropdown";
 
 export default function VacancySearch({ vacancies, search, activities }) {
     const [query, setQuery] = useState(search || "");
     const [showQR, setShowQR] = useState(null);
+    const [specializations, setSpecializations] = useState([]);
+    const [jobType, setJobType] = useState("");
+    const [salaryFrom, setSalaryFrom] = useState("");
+    const [salaryTo, setSalaryTo] = useState("");
+    const [postedDate, setPostedDate] = useState("");
+
+    const [filters, setFilters] = useState({
+        search: "",
+        specialization: [],
+        job_type: "",
+        salary_from: "",
+        salary_to: "",
+        posted_date: "",
+    });
 
     // Debounce search input
     useEffect(() => {
         const delay = setTimeout(() => {
-            if (query.length >= 3 || query.length === 0) {
-                router.get(
-                    "/",
-                    { search: query },
-                    {
-                        preserveState: true,
-                        replace: true,
-                    }
-                );
-            }
-        }, 500);
+            router.get(
+                "/",
+                {
+                    search: query,
+                    specialization: specializations,
+                    job_type: jobType,
+                    salary_from: salaryFrom,
+                    salary_to: salaryTo,
+                    posted_date: postedDate,
+                },
+                {
+                    preserveState: true,
+                    replace: true,
+                }
+            );
+        }, 400);
 
         return () => clearTimeout(delay);
-    }, [query]);
+    }, [query, specializations, jobType, salaryFrom, salaryTo, postedDate]);
 
     function toTitleCase(str) {
         if (!str) return "";
@@ -38,7 +63,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
             {/* Left Column */}
             <div className="w-20 md:w-1/3 border-r-2 border-r-slate-300 pr-3 fixed top-0 left-0 h-screen flex flex-col bg-white">
                 {/* Search Bar */}
-                <div className="px-5 py-3 border-slate-300 rounded-2xl bg-white mb-6">
+                <div className="px-5 py-3 border-slate-300 rounded-2xl bg-white mb-2 select-none">
                     <img
                         className="h-[60px] w-auto mb-4 mx-auto"
                         src="./images/work.png"
@@ -64,11 +89,12 @@ export default function VacancySearch({ vacancies, search, activities }) {
                                 onClick={() => setQuery("")}
                                 className="cursor-pointer text-gray-500  absolute right-3 top-1/2 -translate-y-1/2 hover:scale-110 transition hover:text-[#074797]"
                             >
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                                 <g
                                     id="SVGRepo_tracerCarrier"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLin
+                                    ejoin="round"
                                 ></g>
                                 <g id="SVGRepo_iconCarrier">
                                     <path d="M4.293,18.293,10.586,12,4.293,5.707A1,1,0,0,1,5.707,4.293L12,10.586l6.293-6.293a1,1,0,1,1,1.414,1.414L13.414,12l6.293,6.293a1,1,0,1,1-1.414,1.414L12,13.414,5.707,19.707a1,1,0,0,1-1.414-1.414Z"></path>
@@ -76,16 +102,38 @@ export default function VacancySearch({ vacancies, search, activities }) {
                             </svg>
                         )}
                     </div>
+                </div>
+                {/* Filters */}
+                <div className="flex flex-wrap gap-2 px-6 mb-5 select-none">
+                    <SpecializationDropdown
+                        specializations={filters.specializations} // or specializations state
+                        onChange={(selectedIds) => {
+                            setSpecializations(selectedIds);
+                            router.get(
+                                route("vacancies.index"),
+                                { specializations: selectedIds },
+                                { preserveState: true, replace: true }
+                            );
+                        }}
+                    />
 
-                    <p className="text-xs text-gray-500 mt-2">
-                        Type at least{" "}
-                        <span className="font-semibold">3 characters</span> to
-                        search.
-                    </p>
+                    <JobTypeDropdown value={jobType} onChange={setJobType} />
+
+                    <SalaryFromDropdown
+                        value={salaryFrom}
+                        onChange={setSalaryFrom}
+                    />
+
+                    <SalaryToDropdown value={salaryTo} onChange={setSalaryTo} />
+
+                    <PostedDateDropdown
+                        value={postedDate}
+                        onChange={setPostedDate}
+                    />
                 </div>
 
                 {/* Announcements + Footer */}
-                <div className="bg-white  rounded-2xl border-slate-300 flex-1 flex flex-col min-h-0">
+                <div className="bg-white  rounded-2xl border-slate-300 flex-1 flex flex-col min-h-0 select-none">
                     <h1 className="text-2xl px-4 font-bold mb-5 flex-shrink-0 flex items-center gap-2">
                         <img
                             src="./images/horn.png"
@@ -98,7 +146,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
                     {/* announcements */}
                     <div className="space-y-3 overflow-y-auto flex-1 min-h-0 pr-2">
                         {activities.length === 0 ? (
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-gray-500 text-center text-sm">
                                 No announcements yet.
                             </p>
                         ) : (
@@ -155,7 +203,7 @@ export default function VacancySearch({ vacancies, search, activities }) {
                         {vacancies.map((vacancy) => (
                             <div
                                 key={vacancy.id}
-                                className="p-6 border rounded-2xl shadow-lg border-slate-200 bg-white flex flex-col justify-between h-full ransition-all duration-300 hover:shadow-[0_0_30px_rgba(7,71,151,0.5)]"
+                                className="p-6 border rounded-2xl shadow-lg border-slate-200 bg-white flex flex-col justify-between h-full ransition-all duration-300 hover:shadow-[0_0_30px_rgba(7,71,151,0.5)] select-none"
                                 onClick={() => setShowQR(vacancy)}
                             >
                                 <div className="flex flex-col items-center">
@@ -185,6 +233,14 @@ export default function VacancySearch({ vacancies, search, activities }) {
                                     <p className="text-sm text-gray-600 mb-4 text-center">
                                         {vacancy.company?.name ||
                                             "Unknown Company"}
+                                    </p>
+
+                                    {/* Salary */}
+                                    <p className="text-sm font-semibold text-gray-600 mb-4 text-center">
+                                        {vacancy.salary_from &&
+                                        vacancy.salary_to
+                                            ? `₱${vacancy.salary_from.toLocaleString()} - ₱${vacancy.salary_to.toLocaleString()}`
+                                            : "Salary not specified"}
                                     </p>
                                 </div>
 
