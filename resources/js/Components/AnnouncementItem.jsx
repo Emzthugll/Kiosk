@@ -1,6 +1,6 @@
 import { MdLocationOn } from "react-icons/md";
 import { FaRegCalendarCheck, FaRegCalendarTimes } from "react-icons/fa";
-
+//this is a comment
 export default function AnnouncementItem({ activity }) {
     const textDetails =
         new DOMParser().parseFromString(activity.details, "text/html").body
