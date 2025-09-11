@@ -41,6 +41,7 @@ export default function JobTypeDropdown({ value, onChange }) {
                         <div
                             key={option}
                             onClick={() => {
+                                console.log("Selected:", option);
                                 onChange(option);
                                 setOpen(false);
                             }}

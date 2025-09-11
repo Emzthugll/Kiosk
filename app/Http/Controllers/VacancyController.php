@@ -19,7 +19,7 @@ class VacancyController extends Controller
         $salaryTo = $request->input('salary_to');
         $postedDate = $request->input('posted_date');
 
-        
+        // Specializations with subs
         $specializations = Specialization::with('subSpecializations')->get()
             ->mapWithKeys(function($spec) {
                 return [
@@ -27,32 +27,52 @@ class VacancyController extends Controller
                 ];
             });
 
-        
+        // Activities (only with companies)
         $activities = DB::table('recruitment_activities')
             ->select(
                 'recruitment_activities.id',
-                'type',
-                'start',
-                'end',
-                'venue',
-                'details',
-                DB::raw('GROUP_CONCAT(companies.name SEPARATOR " | ") as related_companies')
+                'recruitment_activities.type',
+                'recruitment_activities.start',
+                'recruitment_activities.end',
+                'recruitment_activities.venue',
+                'recruitment_activities.details',
+                DB::raw('GROUP_CONCAT(companies.name SEPARATOR ", ") as related_companies')
             )
-            ->leftJoin('company_recruitment_activity', 'recruitment_activities.id', '=', 'company_recruitment_activity.recruitment_activity_id')
-            ->leftJoin('companies', 'company_recruitment_activity.company_id', '=', 'companies.id')
-            ->groupBy('recruitment_activities.id', 'type', 'start', 'end', 'venue', 'details')
+            ->join(
+                'company_recruitment_activity',
+                'recruitment_activities.id',
+                '=',
+                'company_recruitment_activity.recruitment_activity_id'
+            )
+            ->join(
+                'companies',
+                'company_recruitment_activity.company_id',
+                '=',
+                'companies.id'
+            )
+            ->groupBy(
+                'recruitment_activities.id',
+                'recruitment_activities.type',
+                'recruitment_activities.start',
+                'recruitment_activities.end',
+                'recruitment_activities.venue',
+                'recruitment_activities.details'
+            )
             ->orderBy('recruitment_activities.created_at', 'desc')
             ->limit(4)
             ->get();
 
-        
+        // Vacancies
         $vacancies = Vacancy::with('company')
             ->when($search, function ($query, $search) {
                 $query->where('title', 'like', "%{$search}%")
                       ->orWhereHas('company', fn($q) => $q->where('name', 'like', "%{$search}%"));
             })
             ->when(!empty($specializationsFilter), fn($query) => $query->whereIn('sub_specialization_id', $specializationsFilter))
-            ->when($jobType && $jobType !== 'All Types', fn($q) => $q->where('job_type', $jobType))
+            ->when($jobType && $jobType !== 'All Types', function ($q) use ($jobType) {
+                $normalized = strtolower(str_replace(['-', ' '], '', $jobType));
+                $q->whereRaw("LOWER(REPLACE(REPLACE(job_type, '-', ''), ' ', '')) = ?", [$normalized]);
+            })
             ->when($salaryFrom && $salaryFrom !== 'Any', function($q) use ($salaryFrom) {
                 $amount = (int) filter_var($salaryFrom, FILTER_SANITIZE_NUMBER_INT);
                 $q->where('salary_from', '>=', $amount);

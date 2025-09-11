@@ -5,7 +5,7 @@ export default function SalaryFromDropdown({ value, onChange }) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
 
-    const options = ["Any", "₱10,000+", "₱20,000+", "₱30,000+", "₱50,000+"];
+    const options = ["₱0", "₱10,000+", "₱20,000+", "₱30,000+", "₱50,000+"];
 
     useEffect(() => {
         const handleClickOutside = (e) => {

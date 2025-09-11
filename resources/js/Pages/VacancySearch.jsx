@@ -27,28 +27,13 @@ export default function VacancySearch({ vacancies, search, activities }) {
         posted_date: "",
     });
 
-    // Debounce search input
     useEffect(() => {
         const delay = setTimeout(() => {
-            router.get(
-                "/",
-                {
-                    search: query,
-                    specialization: specializations,
-                    job_type: jobType,
-                    salary_from: salaryFrom,
-                    salary_to: salaryTo,
-                    posted_date: postedDate,
-                },
-                {
-                    preserveState: true,
-                    replace: true,
-                }
-            );
+            router.get("/", filters, { preserveState: true, replace: true });
         }, 400);
 
         return () => clearTimeout(delay);
-    }, [query, specializations, jobType, salaryFrom, salaryTo, postedDate]);
+    }, [filters]);
 
     function toTitleCase(str) {
         if (!str) return "";
@@ -74,31 +59,33 @@ export default function VacancySearch({ vacancies, search, activities }) {
                         <input
                             type="text"
                             placeholder="Search job vacancies..."
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
+                            value={filters.search}
+                            onChange={(e) =>
+                                setFilters((prev) => ({
+                                    ...prev,
+                                    search: e.target.value,
+                                }))
+                            }
                             autoComplete="off"
                             className="w-full text-[#074797] rounded-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:border-[#074797] shadow-sm"
                         />
-                        {query && (
+
+                        {filters.search && (
                             <svg
                                 fill="currentColor"
                                 viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width={19}
                                 height={19}
-                                onClick={() => setQuery("")}
-                                className="cursor-pointer text-gray-500  absolute right-3 top-1/2 -translate-y-1/2 hover:scale-110 transition hover:text-[#074797]"
+                                onClick={() =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        search: "",
+                                    }))
+                                }
+                                className="cursor-pointer text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 hover:scale-110 transition hover:text-[#074797]"
                             >
-                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                                <g
-                                    id="SVGRepo_tracerCarrier"
-                                    strokeLinecap="round"
-                                    strokeLin
-                                    ejoin="round"
-                                ></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M4.293,18.293,10.586,12,4.293,5.707A1,1,0,0,1,5.707,4.293L12,10.586l6.293-6.293a1,1,0,1,1,1.414,1.414L13.414,12l6.293,6.293a1,1,0,1,1-1.414,1.414L12,13.414,5.707,19.707a1,1,0,0,1-1.414-1.414Z"></path>
-                                </g>
+                                <path d="M4.293,18.293,10.586,12,4.293,5.707A1,1,0,0,1,5.707,4.293L12,10.586l6.293-6.293a1,1,0,1,1,1.414,1.414L13.414,12l6.293,6.293a1,1,0,1,1-1.414,1.414L12,13.414,5.707,19.707a1,1,0,0,1-1.414-1.414Z"></path>
                             </svg>
                         )}
                     </div>
@@ -106,29 +93,55 @@ export default function VacancySearch({ vacancies, search, activities }) {
                 {/* Filters */}
                 <div className="flex flex-wrap gap-2 px-6 mb-5 select-none">
                     <SpecializationDropdown
-                        specializations={filters.specializations} // or specializations state
-                        onChange={(selectedIds) => {
-                            setSpecializations(selectedIds);
-                            router.get(
-                                route("vacancies.index"),
-                                { specializations: selectedIds },
-                                { preserveState: true, replace: true }
-                            );
+                        specializations={filters.specialization}
+                        onChange={(selectedIds) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                specialization: selectedIds,
+                            }))
+                        }
+                    />
+
+                    <JobTypeDropdown
+                        value={filters.job_type}
+                        onChange={(selectedType) => {
+                            console.log("Filtering by jobType:", selectedType);
+                            setFilters((prev) => ({
+                                ...prev,
+                                job_type: selectedType,
+                            }));
                         }}
                     />
 
-                    <JobTypeDropdown value={jobType} onChange={setJobType} />
-
                     <SalaryFromDropdown
-                        value={salaryFrom}
-                        onChange={setSalaryFrom}
+                        value={filters.salary_from}
+                        onChange={(value) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                salary_from: value,
+                            }))
+                        }
                     />
 
-                    <SalaryToDropdown value={salaryTo} onChange={setSalaryTo} />
+                    <SalaryToDropdown
+                        value={filters.salary_to}
+                        onChange={(value) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                salary_to: value,
+                            }))
+                        }
+                        salaryFrom={filters.salary_from}
+                    />
 
                     <PostedDateDropdown
-                        value={postedDate}
-                        onChange={setPostedDate}
+                        value={filters.posted_date}
+                        onChange={(value) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                posted_date: value,
+                            }))
+                        }
                     />
                 </div>
 

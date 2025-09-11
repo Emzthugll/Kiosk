@@ -13,7 +13,7 @@ const style = {
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     border: "none",
-    outline: "none", // remove focus outline
+    outline: "none",
     borderRadius: "12px",
     boxShadow: 24,
     maxWidth: "700px",

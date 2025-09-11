@@ -6,23 +6,29 @@ export default function AnnouncementItem({ activity }) {
         new DOMParser().parseFromString(activity.details, "text/html").body
             .textContent || "";
 
+    const companies = activity.related_companies
+        ? activity.related_companies.split(" | ")
+        : [];
+
     return (
         <div className="text-sm text-gray-800 border-b border-gray-200 pb-4 mb-3">
             {/* Type */}
             <div className="px-14 font-extrabold mb-4">{activity.type}</div>
 
-            {/* Details */}
-            <div className="px-14 text-gray-600 font-medium mb-2">
-                {textDetails}
-            </div>
-
             {/* Companies */}
-            {activity.related_companies && (
+            {companies.length > 0 && (
                 <div className="px-14 text-xs text-gray-500 mb-2">
-                    Companies:{" "}
-                    <span className="text-green-500 text-xs font-semibold  rounded-full">
-                        {activity.related_companies}
-                    </span>
+                    Companies:
+                    <div className="flex flex-wrap gap-2 mt-1">
+                        {companies.map((company, idx) => (
+                            <span
+                                key={idx}
+                                className="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full"
+                            >
+                                {company}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             )}
 
@@ -30,7 +36,7 @@ export default function AnnouncementItem({ activity }) {
             <div className="px-14 text-xs text-gray-500 mt-3 space-y-1">
                 <div className="flex items-center space-x-1 mb-1">
                     <FaRegCalendarCheck className="text-blue-500" size={18} />
-                    <span className="  text-xs font-semibold  rounded-full">
+                    <span className="text-xs font-semibold">
                         {new Date(activity.start).toLocaleString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -44,7 +50,7 @@ export default function AnnouncementItem({ activity }) {
 
                 <div className="flex items-center space-x-1 mb-1">
                     <FaRegCalendarTimes className="text-red-600" size={18} />
-                    <span className="  text-xs font-semibold rounded-full">
+                    <span className="text-xs font-semibold">
                         {new Date(activity.end).toLocaleString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -58,7 +64,7 @@ export default function AnnouncementItem({ activity }) {
 
                 <div className="flex items-center space-x-1">
                     <MdLocationOn className="text-red-500" size={19} />
-                    <span className=" text-gray-500 text-xs font-semibold rounded-full">
+                    <span className="text-gray-500 text-xs font-semibold">
                         {activity.venue}
                     </span>
                 </div>
